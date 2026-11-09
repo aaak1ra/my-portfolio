@@ -13,8 +13,18 @@ import {
   Search,
   Hammer,
   RefreshCw,
+  Menu,
+  X,
 } from "lucide-react";
 import { useTheme } from "./context/ThemeContext";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
 export default function Home() {
   const { theme, toggleTheme } = useTheme();
   const router = useRouter();
@@ -33,6 +43,7 @@ export default function Home() {
     }
   }, [router]);
   const [phTime, setPhTime] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useEffect(() => {
     const updatePhilippineTime = () => {
       const time = new Intl.DateTimeFormat("en-PH", {
@@ -145,13 +156,13 @@ export default function Home() {
       : "bg-emerald-50 text-emerald-600 border border-emerald-200/60"
   }`;
   return (
-    <div className={`min-h-screen ${t.bg}`}>
+    <div className={`${poppins.className} min-h-screen ${t.bg}`}>
       <div className="max-w-[1480px] w-full mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-6">
         <div className="flex flex-col lg:flex-row items-start gap-5">
           {/* LEFT SIDEBAR */}
           <aside
-            className={`page-enter page-enter-left w-full lg:w-[290px] lg:flex-shrink-0 lg:sticky lg:top-6 lg:self-start h-auto min-h-0 lg:h-[calc(100vh-3rem)] rounded-2xl p-4 sm:p-6 flex flex-col ${t.card}`}
-            style={{ fontFamily: "'Poppins', sans-serif" }}
+            className={`page-enter page-enter-left w-full lg:w-[290px] lg:flex-shrink-0 lg:sticky lg:top-6 lg:self-start h-auto min-h-0 lg:h-[calc(100vh-3rem)] rounded-2xl p-4 sm:p-6 hidden lg:flex flex-col ${t.card}`}
+            style={{ fontFamily: "inherit" }}
           >
             <div className="w-full mt-3 sm:mt-8">
               <div className="text-center">
@@ -249,17 +260,18 @@ export default function Home() {
               />
 
                <span>
-                Available for Software Engineer, IT support, and Data Analyst roles
+                Available for Software Engineer, IT support, Data Analyst, and and
+                  other available roles
               </span>
             </div>
           </aside>
           {/* MAIN CONTENT */}
-          <main className={`page-enter page-enter-right min-w-0 flex-1 rounded-2xl p-4 sm:p-6 lg:p-7 ${t.card}`}>
-            {/* NAVIGATION */}
+          <main className={`page-enter page-enter-right min-w-0 flex-1 rounded-none border-0 bg-transparent p-0 shadow-none sm:rounded-2xl sm:border sm:p-6 sm:shadow-sm lg:p-7 ${dark ? "sm:bg-[#141414] sm:border-[#2A2A2A]" : "sm:bg-white sm:border-slate-200/60"}`} >
+                        {/* NAVIGATION */}
             <nav
-              className={`page-stagger flex items-center justify-between pb-4 border-b ${t.border}`}
-              aria-label="Main navigation"
-            >
+  className={`relative flex items-center justify-between pb-4 border-b ${t.border}`}
+  aria-label="Main navigation"
+>
               <Link
                 href="/"
                 aria-label="Go to About home page"
@@ -269,9 +281,11 @@ export default function Home() {
                     sessionStorage.setItem("akira-internal-navigation", "1");
                   }
                 }}>
-                
+                <span className={`text-2xl font-bold tracking-tight ${t.title}`}><span className={t.accent}></span></span>
               </Link>
-              <div className="hidden sm:flex gap-1 text-sm">
+
+              {/* DESKTOP NAVIGATION (PC) - DO NOT TOUCH */}
+              <div className="hidden sm:flex gap-1 text-sm sm:absolute sm:left-1/2 sm:top-0 sm:-translate-x-1/2">
                 {[
                   { name: "About", href: "/" },
                   { name: "Resume", href: "/resume?from=nav" },
@@ -295,111 +309,112 @@ export default function Home() {
                             : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"
                       }`}
                      onClick={(event) => {
-                  if (event.currentTarget.getAttribute("href") !== window.location.pathname) {
-                    sessionStorage.setItem("akira-internal-navigation", "1");
-                  }
-                }}>
+                        if (event.currentTarget.getAttribute("href") !== window.location.pathname) {
+                          sessionStorage.setItem("akira-internal-navigation", "1");
+                        }
+                      }}>
                       {item.name}
                     </Link>
                   );
                 })}
               </div>
-              <button
-                type="button"
-                onClick={toggleTheme}
-                aria-label={
-                  dark ? "Switch to light mode" : "Switch to dark mode"
-                }
-                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-12 hover:scale-105 ${
-                  dark
-                    ? "bg-[#2A2A2A] text-[#B8B8B8] hover:text-white hover:bg-[#3A3A3A]"
-                    : "bg-slate-100 text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-slate-200"
-                }`}
-              >
-                {dark ? (
-                  <Sun size={18} aria-hidden="true" />
-                ) : (
-                  <Moon size={18} aria-hidden="true" />
-                )}
-              </button>
+
+              {/* MOBILE: THEME + BURGER BUTTONS */}
+              <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-12 hover:scale-105 ${
+                    dark
+                      ? "bg-[#2A2A2A] text-[#B8B8B8] hover:text-white hover:bg-[#3A3A3A]"
+                      : "bg-slate-100 text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-slate-200"
+                  }`}
+                >
+                  {dark ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen((open) => !open)}
+                  aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                  aria-expanded={mobileMenuOpen}
+                  aria-controls="mobile-navigation-menu"
+                  className={`sm:hidden w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${
+                    dark 
+                      ? "bg-[#141414] border-[#2A2A2A] text-[#E8E8E8]" 
+                      : "bg-slate-50 border-slate-200 text-[#1A1A2E]"
+                  }`}
+                >
+                  {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </div>
             </nav>
-            {/* MOBILE NAVIGATION — horizontally scrollable on narrow screens */}
-            <div
-              className={`sm:hidden mt-3 -mx-1 flex gap-1 overflow-x-auto px-1 pb-2 ${t.border}`}
-              role="navigation"
-              aria-label="Mobile navigation"
-            >
-                <Link
-                  key="About"
-                  href="/"
-                  aria-current={"page"}
-                  onClick={() => {
-                    if (window.location.pathname !== "/") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "bg-white/5 text-[#38BDF8]" : "bg-[#E8F0FE] text-[#2563EB]"}`}
-                >
-                  About
-                </Link>
-                <Link
-                  key="Resume"
-                  href="/resume?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/resume") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Resume
-                </Link>
-                <Link
-                  key="Skills"
-                  href="/skills?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/skills") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Skills
-                </Link>
-                <Link
-                  key="Portfolio"
-                  href="/portfolio?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/portfolio") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Portfolio
-                </Link>
-                <Link
-                  key="Contact"
-                  href="/contact?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/contact") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Contact
-                </Link>
-            </div>
-            {/* CENTERED HERO */}
-            <section className="min-h-[320px] sm:min-h-[380px] lg:min-h-[440px] flex flex-col items-center justify-center text-center px-2 sm:px-6 py-8 lg:py-10">
+
+            {/* MOBILE DROPDOWN (THE CLEAN LIST) */}
+            {mobileMenuOpen && (
+              <div
+                id="mobile-navigation-menu"
+                className={`sm:hidden flex flex-col gap-0.5 mt-3 rounded-2xl border p-2 shadow-lg absolute z-50 w-[170px] right-3 ${
+  dark ? "bg-[#141414] border-[#2A2A2A]" : "bg-white border-slate-200"
+}`}
+                role="navigation"
+                aria-label="Mobile navigation"
+              >
+                {[
+                  { name: "About", href: "/" },
+                  { name: "Resume", href: "/resume?from=nav" },
+                  { name: "Skills", href: "/skills?from=nav" },
+                  { name: "Portfolio", href: "/portfolio?from=nav" },
+                  { name: "Contact", href: "/contact?from=nav" },
+                ].map((item) => {
+                  const active = item.name === "About";
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        if (window.location.pathname !== item.href.split("?")[0]) {
+                          sessionStorage.setItem("akira-internal-navigation", "1");
+                        }
+                      }}
+                      className={`w-full rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                        active
+                          ? dark
+                            ? "bg-white/5 text-[#38BDF8]"
+                            : "bg-[#E8F0FE] text-[#2563EB]"
+                          : dark
+                            ? "text-[#B8B8B8] hover:text-white hover:bg-white/5"
+                            : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+            {/* COMPACT PROFILE INTRO — MOBILE ONLY */}
+            <section className="lg:hidden mt-8 mb-2 flex items-center gap-4">
+              <div className="w-[82px] h-[82px] shrink-0 overflow-hidden rounded-2xl border border-sky-400/40 shadow-sm">
+                <img src="/profile.jpg" alt="Akira Yuki M. Aganan" className="w-full h-full object-cover" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className={`text-[10px] font-semibold tracking-[0.18em] uppercase ${t.accent}`}> </p>
+                <h1 className={`mt-1 text-[19px] font-bold leading-tight tracking-tight ${t.title}`}>Akira Yuki M. Aganan</h1>
+                <p className={`mt-1 text-[12px] leading-relaxed ${t.muted}`}>Software Engineer <span className={t.accent}>·</span> IT Support <span className={t.accent}>·</span> Data Analyst</p>
+                <div className={`inline-flex items-center gap-2 mt-2 rounded-full px-2.5 py-1 text-[11px] font-medium ${statusPillClass}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Open to work
+                </div>
+              </div>
+            </section>
+            {/* RESPONSIVE HERO */}
+            <section className="min-h-0 sm:min-h-[380px] lg:min-h-[440px] flex flex-col items-start sm:items-center justify-center text-left sm:text-center px-0 sm:px-6 py-8 sm:py-8 lg:py-10">
               {/* STATUS PILLS — REPLACES THE OLD ROLE LABEL */}
-              <div className="animate-pop flex flex-wrap items-center justify-center gap-2 mb-6 max-w-3xl">
-                <div className={statusPillClass}>
+              <div className="animate-pop hidden sm:flex flex-wrap items-center justify-center gap-2 mb-5 sm:mb-6 max-w-3xl">
+                <div className={`hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-default ${dark ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-emerald-50 text-emerald-600 border border-emerald-200/60"}`}>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   Open to work
                 </div>
@@ -412,15 +427,18 @@ export default function Home() {
                   {phTime || "00:00:00 PHT"}
                 </div>
               </div>
+              <p className={`sm:hidden mb-3 text-[10px] font-semibold tracking-[0.16em] leading-relaxed uppercase ${t.accent}`}>
+                Software Engineering <span aria-hidden="true">·</span> IT Support <span aria-hidden="true">·</span> Data Analyst
+              </p>
               <h2
-                className={`animate-rise delay-100 text-5xl sm:text-6xl lg:text-7xl xl:text-[82px] font-semibold leading-[1.02] tracking-tight max-w-5xl ${t.title}`}
+                className={`animate-rise delay-100 text-[clamp(2.8rem,12.5vw,4.5rem)] sm:text-6xl lg:text-7xl xl:text-[82px] font-semibold leading-[1.02] tracking-[-0.045em] max-w-5xl ${t.title}`}
               >
                 Driven to build.
                 <br />
                 Ready to solve.
               </h2>
               <p
-                className={`animate-rise delay-200 text-base sm:text-lg leading-8 max-w-2xl mt-4 ${t.muted}`}
+                className={`animate-rise delay-200 text-[15px] sm:text-lg leading-[1.85] sm:leading-8 max-w-2xl mt-5 sm:mt-4 ${t.muted}`}
               >
                 I combine an interest in software engineering with hands-on IT
                 support experience. Through academic projects and my OJT,
@@ -430,14 +448,13 @@ export default function Home() {
                 and contribute to real-world projects.
               </p>
               {/* ACTION BUTTONS */}
-              <div className="animate-rise delay-300 flex flex-wrap justify-center gap-3 mt-5">
+              <div className="animate-rise delay-300 flex flex-wrap justify-start sm:justify-center gap-3 mt-6 sm:mt-5 w-full">
                 <Link
-                  href="/portfolio"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    window.location.assign("/portfolio");
-                  }}
-                  className={`px-7 py-3 rounded-full font-medium text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center gap-2 ${
+  href="/portfolio"
+  onClick={() => {
+    sessionStorage.setItem("akira-internal-navigation", "1");
+  }}
+                  className={`px-6 sm:px-7 py-3 rounded-full font-medium text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center gap-2 ${
                     dark
                       ? "bg-[#00a3f5] text-black hover:bg-[#22D3EE]"
                       : "bg-[#00a3f5] text-white hover:bg-sky-500"
@@ -447,12 +464,11 @@ export default function Home() {
                   <ArrowUpRight size={16} aria-hidden="true" />
                 </Link>
                 <Link
-                  href="/contact"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    window.location.assign("/contact");
-                  }}
-                  className={`px-7 py-3 rounded-full font-medium text-sm border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+  href="/contact"
+  onClick={() => {
+    sessionStorage.setItem("akira-internal-navigation", "1");
+  }}
+                  className={`px-6 sm:px-7 py-3 rounded-full font-medium text-sm border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                     dark
                       ? "border-[#38BDF8] text-[#38BDF8] hover:bg-[#38BDF8]/10"
                       : "border-[#2563EB] text-[#2563EB] hover:bg-[#2563EB]/10"
@@ -463,7 +479,7 @@ export default function Home() {
               </div>
             </section>
             {/* HOW I WORK */}
-            <section className={`animate-rise delay-200 pt-6 mt-1 border-t ${t.border}`}>
+            <section className={`animate-rise delay-200 pt-6 mt-5 sm:mt-1 border-t ${t.border}`}>
               <div className="mb-5">
                 <span
                   className={`text-xs tracking-widest uppercase font-medium ${t.accent}`}

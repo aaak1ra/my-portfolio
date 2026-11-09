@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Maximize2,
   X,
+  Menu,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
@@ -21,6 +22,7 @@ export default function PortfolioPage() {
   const { theme, toggleTheme } = useTheme();
   const router = useRouter();
   const refreshRedirectHandled = useRef(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (refreshRedirectHandled.current) return;
@@ -393,9 +395,9 @@ export default function PortfolioPage() {
 
           <aside
             aria-label="Profile information"
-            className={`sidebar-enter-left w-full lg:w-[290px] lg:flex-shrink-0 lg:sticky lg:top-6 lg:self-start h-auto min-h-0 lg:h-[calc(100vh-3rem)] rounded-2xl p-4 sm:p-6 flex flex-col ${t.card}`}
+           className={`hidden lg:flex sidebar-enter-left w-full lg:w-[290px] lg:flex-shrink-0 lg:sticky lg:top-6 lg:self-start h-auto min-h-0 lg:h-[calc(100vh-3rem)] rounded-2xl p-4 sm:p-6 flex-col ${t.card}`}
             style={{
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "inherit",
             }}
           >
             <div className="w-full mt-3 sm:mt-8">
@@ -505,9 +507,9 @@ export default function PortfolioPage() {
 
               <div className="flex justify-center gap-3">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/akirayukiaganan/"
                   aria-label="Facebook"
-                  className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all ${
+                  className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-200 hover:-translate-y-1 hover:scale-105 hover:shadow-md ${
                     dark
                       ? "bg-[#0a0f1f] border-[#1e2a4a] hover:border-[#38BDF8]"
                       : "bg-white border-slate-200 hover:border-[#2563EB]"
@@ -517,9 +519,9 @@ export default function PortfolioPage() {
                 </a>
 
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/akira-aganan-6bb690421/"
                   aria-label="LinkedIn"
-                  className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all ${
+                  className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-200 hover:-translate-y-1 hover:scale-105 hover:shadow-md ${
                     dark
                       ? "bg-[#0a0f1f] border-[#1e2a4a] hover:border-[#38BDF8]"
                       : "bg-white border-slate-200 hover:border-[#2563EB]"
@@ -541,7 +543,8 @@ export default function PortfolioPage() {
               />
 
                <span>
-                Available for Software Engineer, IT support, and Data Analyst roles
+                Available for Software Engineer, IT support, Data Analyst, and and
+                  other available roles
               </span>
             </div>
           </aside>
@@ -553,7 +556,7 @@ export default function PortfolioPage() {
           <main
             className={`min-w-0 flex-1 rounded-2xl p-4 sm:p-6 lg:p-7 ${t.card}`}
             style={{
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "inherit",
             }}
           >
 
@@ -563,7 +566,7 @@ export default function PortfolioPage() {
 
             <nav
               aria-label="Primary navigation"
-              className={`flex items-center justify-between pb-4 border-b ${t.border}`}
+              className={`relative flex items-center justify-between pb-4 border-b ${t.border}`}
             >
               <Link
                 href="/"
@@ -574,7 +577,7 @@ export default function PortfolioPage() {
                     sessionStorage.setItem("akira-internal-navigation", "1");
                   }
                 }}>
-                JAL.
+              
               </Link>
 
               <div className="hidden sm:flex gap-1 text-sm">
@@ -656,105 +659,82 @@ export default function PortfolioPage() {
                 </Link>
               </div>
 
-              <button
-                type="button"
-                onClick={toggleTheme}
-                aria-label={
-                  dark
-                    ? "Switch to light mode"
-                    : "Switch to dark mode"
-                }
-                className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
-                  dark
-                    ? "bg-[#2A2A2A] text-[#B8B8B8] hover:text-white hover:bg-[#3A3A3A]"
-                    : "bg-slate-100 text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-slate-200"
-                }`}
-              >
-                {dark ? (
-                  <Sun
-                    size={18}
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <Moon
-                    size={18}
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+                    dark
+                      ? "bg-[#2A2A2A] text-[#B8B8B8] hover:text-white hover:bg-[#3A3A3A]"
+                      : "bg-slate-100 text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-slate-200"
+                  }`}
+                >
+                  {dark ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+                </button>
+
+                {/* MOBILE BURGER BUTTON */}
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen((open) => !open)}
+                  aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                  aria-expanded={mobileMenuOpen}
+                  aria-controls="mobile-navigation-menu"
+                  className={`sm:hidden w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${
+                    dark
+                      ? "bg-[#141414] border-[#2A2A2A] text-[#E8E8E8]"
+                      : "bg-slate-50 border-slate-200 text-[#1A1A2E]"
+                  }`}
+                >
+                  {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </div>
+
+              {/* MOBILE DROPDOWN (MOBILE ONLY) */}
+              {mobileMenuOpen && (
+                <div
+                  id="mobile-navigation-menu"
+                  className={`sm:hidden flex flex-col gap-0.5 rounded-2xl border p-2 shadow-lg absolute z-50 w-[170px] right-3 top-full mt-3 ${
+                    dark ? "bg-[#141414] border-[#2A2A2A]" : "bg-white border-slate-200"
+                  }`}
+                  aria-label="Mobile navigation"
+                >
+                  {[
+                    { name: "About", href: "/" },
+                    { name: "Resume", href: "/resume?from=nav" },
+                    { name: "Skills", href: "/skills?from=nav" },
+                    { name: "Portfolio", href: "/portfolio?from=nav" },
+                    { name: "Contact", href: "/contact?from=nav" },
+                  ].map((item) => {
+                    const active = item.name === "Portfolio";
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          if (window.location.pathname !== item.href.split("?")[0]) {
+                            sessionStorage.setItem("akira-internal-navigation", "1");
+                          }
+                        }}
+                        className={`w-full rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                          active
+                            ? dark
+                              ? "bg-white/5 text-[#38BDF8]"
+                              : "bg-[#E8F0FE] text-[#2563EB]"
+                            : dark
+                              ? "text-[#B8B8B8] hover:text-white hover:bg-white/5"
+                              : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </nav>
-            {/* MOBILE NAVIGATION — horizontally scrollable on narrow screens */}
-            <div
-              className={`sm:hidden mt-3 -mx-1 flex gap-1 overflow-x-auto px-1 pb-2 ${t.border}`}
-              role="navigation"
-              aria-label="Mobile navigation"
-            >
-                <Link
-                  key="About"
-                  href="/"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  About
-                </Link>
-                <Link
-                  key="Resume"
-                  href="/resume?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/resume") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Resume
-                </Link>
-                <Link
-                  key="Skills"
-                  href="/skills?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/skills") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Skills
-                </Link>
-                <Link
-                  key="Portfolio"
-                  href="/portfolio?from=nav"
-                  aria-current={"page"}
-                  onClick={() => {
-                    if (window.location.pathname !== "/portfolio") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "bg-white/5 text-[#38BDF8]" : "bg-[#E8F0FE] text-[#2563EB]"}`}
-                >
-                  Portfolio
-                </Link>
-                <Link
-                  key="Contact"
-                  href="/contact?from=nav"
-                  aria-current={undefined}
-                  onClick={() => {
-                    if (window.location.pathname !== "/contact") {
-                      sessionStorage.setItem("akira-internal-navigation", "1");
-                    }
-                  }}
-                  className={`shrink-0 rounded-lg px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${dark ? "text-[#B8B8B8] hover:text-white hover:bg-white/5" : "text-[#4A5A7A] hover:text-[#1A1A2E] hover:bg-[#F0F5FA]"}`}
-                >
-                  Contact
-                </Link>
-            </div>
 
             {/* ==================================================
                 PORTFOLIO HEADER
