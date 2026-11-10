@@ -891,7 +891,7 @@ export default function ContactPage() {
                   : "text-[#52657D] border-[#D1E0F0]"
               }`}
             >
-              Â© Akira Yuki Aganan. All rights reserved.
+              © Akira Yuki Aganan. All rights reserved.
             </div>
 
           </main>
