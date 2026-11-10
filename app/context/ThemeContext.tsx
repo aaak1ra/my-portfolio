@@ -17,10 +17,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
 
   // Runs once, right after the page mounts in the browser.
-  // This is where we catch up to whatever the user actually saved.
+  // This only restores a theme chosen during this visit; a new visit is always dark.
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("theme");
+      const saved = sessionStorage.getItem("theme");
       if (saved === "light" || saved === "dark") {
         setTheme(saved);
       }
@@ -31,7 +31,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem("theme", theme);
+      sessionStorage.setItem("theme", theme);
     } catch (e) {
       // ignore
     }

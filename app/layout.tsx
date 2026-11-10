@@ -9,18 +9,18 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'My Portfolio',
+  title: 'Akira Yuki Aganan | Portfolio',
   description: 'Computer Engineering Graduate Portfolio',
 };
 
 // Runs BEFORE React loads and BEFORE the page paints. It reads the saved
-// theme straight from localStorage and puts it on <html> immediately, so
-// there is never a flash of the wrong theme — on first load, on refresh,
-// or when navigating.
+// theme from sessionStorage (cleared when the tab/browser is closed) and
+// puts it on <html> immediately. Every new visit starts in dark; a switch to
+// light only lasts until the visitor closes the site.
 const themeInitScript = `
 (function () {
   try {
-    var saved = localStorage.getItem('theme');
+    var saved = sessionStorage.getItem('theme');
     var theme = saved === 'light' ? 'light' : 'dark';
     document.documentElement.className = theme;
   } catch (e) {}

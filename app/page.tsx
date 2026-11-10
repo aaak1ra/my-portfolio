@@ -428,7 +428,7 @@ export default function Home() {
                 </div>
               </div>
               <p className={`sm:hidden mb-3 text-[10px] font-semibold tracking-[0.16em] leading-relaxed uppercase ${t.accent}`}>
-                Software Engineering <span aria-hidden="true">·</span> IT Support <span aria-hidden="true">·</span> Data Analyst
+                Software Engineer <span aria-hidden="true">·</span> IT Support <span aria-hidden="true">·</span> Data Analyst
               </p>
               <h2
                 className={`animate-rise delay-100 text-[clamp(2.8rem,12.5vw,4.5rem)] sm:text-6xl lg:text-7xl xl:text-[82px] font-semibold leading-[1.02] tracking-[-0.045em] max-w-5xl ${t.title}`}
