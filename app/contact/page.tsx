@@ -119,32 +119,39 @@ export default function ContactPage() {
     </svg>
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
+    setStatus("sending");
 
-    const name = (
-      form.elements.namedItem("name") as HTMLInputElement
-    ).value;
+    try {
+      const formData = new FormData(form);
+      formData.append("access_key", "c540f881-9296-4276-9966-f04c03f7fbe4");
+      formData.append(
+        "subject",
+        `Portfolio Contact from ${formData.get("name")}`
+      );
 
-    const email = (
-      form.elements.namedItem("email") as HTMLInputElement
-    ).value;
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
 
-    const message = (
-      form.elements.namedItem("message") as HTMLTextAreaElement
-    ).value;
-
-    const subject = encodeURIComponent(
-      `Portfolio Contact from ${name}`
-    );
-
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
-    );
-
-    window.location.href = `mailto:akiraaganan0@gmail.com?subject=${subject}&body=${body}`;
+      if (data.success) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -560,14 +567,27 @@ export default function ContactPage() {
 
                 {/* EMAIL */}
                 <a
-                  href="mailto:akiraaganan0@gmail.com"
-                  className={`group rounded-2xl border p-5 transition-all duration-300 motion-safe:transform-gpu focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${
+                                    href="mailto:akiraaganan0@gmail.com"
+                  onClick={(event) => {
+                    const isMobile = /Android|iPhone|iPad|iPod/i.test(
+                      navigator.userAgent
+                    );
+                    if (!isMobile) {
+                      event.preventDefault();
+                      window.open(
+                        "https://mail.google.com/mail/?view=cm&fs=1&to=akiraaganan0@gmail.com&su=Portfolio%20Inquiry",
+                        "_blank",
+                        "noopener,noreferrer"
+                      );
+                    }
+                  }}
+                  className={`group rounded-2xl border p-3.5 transition-all duration-300 motion-safe:transform-gpu focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${
                     dark
                       ? "border-[#2A2A2A] bg-[#111111] hover:border-[#38BDF8]/70 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(56,189,248,0.08)]"
                       : "border-[#D1E0F0] bg-[#F8FAFC] hover:border-[#2563EB]/60 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)]"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
 
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${t.accentBg}`}
@@ -581,13 +601,13 @@ export default function ContactPage() {
 
                     <div className="min-w-0 flex-1">
                       <div
-                        className={`text-sm ${t.muted}`}
+                        className={`text-xs ${t.muted}`}
                       >
                         Email me
                       </div>
 
                       <div
-                        className={`text-sm sm:text-base font-bold mt-1 break-words ${
+                        className={`text-xs sm:text-sm font-bold mt-1 break-words ${
                           dark ? "text-white" : "text-black"
                         }`}
                       >
@@ -607,13 +627,13 @@ export default function ContactPage() {
                 {/* PHONE */}
                 <a
                   href="tel:+639083620938"
-                  className={`group rounded-2xl border p-5 transition-all duration-300 motion-safe:transform-gpu focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${
+                  className={`group rounded-2xl border p-3.5 transition-all duration-300 motion-safe:transform-gpu focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${
                     dark
                       ? "border-[#2A2A2A] bg-[#111111] hover:border-[#38BDF8]/70 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(56,189,248,0.08)]"
                       : "border-[#D1E0F0] bg-[#F8FAFC] hover:border-[#2563EB]/60 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)]"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
 
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${t.accentBg}`}
@@ -627,13 +647,13 @@ export default function ContactPage() {
 
                     <div className="min-w-0 flex-1">
                       <div
-                        className={`text-sm ${t.muted}`}
+                        className={`text-xs ${t.muted}`}
                       >
                         Call or message
                       </div>
 
                       <div
-                        className={`text-sm sm:text-base font-bold mt-1 ${
+                        className={`text-xs sm:text-sm font-bold mt-1 ${
                           dark ? "text-white" : "text-black"
                         }`}
                       >
@@ -652,13 +672,13 @@ export default function ContactPage() {
 
                 {/* LOCATION */}
                 <div
-                  className={`rounded-2xl border p-5 ${
+                  className={`rounded-2xl border p-3.5 ${
                     dark
                       ? "border-[#2A2A2A] bg-[#111111]"
                       : "border-[#D1E0F0] bg-[#F8FAFC]"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
 
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${t.accentBg}`}
@@ -672,13 +692,13 @@ export default function ContactPage() {
 
                     <div className="min-w-0 flex-1">
                       <div
-                        className={`text-sm ${t.muted}`}
+                        className={`text-xs ${t.muted}`}
                       >
                         Based in
                       </div>
 
                       <div
-                        className={`text-sm sm:text-base font-bold mt-1 ${
+                        className={`text-xs sm:text-sm font-bold mt-1 ${
                           dark ? "text-white" : "text-black"
                         }`}
                       >
@@ -877,6 +897,21 @@ export default function ContactPage() {
                       aria-hidden="true"
                     />
                   </button>
+
+                  {status === "sending" && (
+                    <p className="text-sm">Sending...</p>
+                  )}
+                  {status === "success" && (
+                    <p className="text-sm text-emerald-500">
+                      Message sent! I'll get back to you soon.
+                    </p>
+                  )}
+                  {status === "error" && (
+                    <p className="text-sm text-red-500">
+                      Something went wrong. Please email me directly at
+                      akiraaganan0@gmail.com.
+                    </p>
+                  )}
 
                 </form>
               </div>
