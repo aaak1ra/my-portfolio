@@ -212,7 +212,7 @@ export default function PortfolioPage() {
       role: "Web Developer · Client Project",
       description:
         "A client-based coffee shop website created to present Razon's Cafe and its brand through an inviting, visually engaging online experience. The website gives visitors a convenient way to explore the cafe's offerings and learn more about the business.",
-      technologies: ["HTML", "CSS", "JavaScript", "GitHub Pages"],
+      technologies: ["HTML", "CSS", "JavaScript"],
       images: [
         "/projects/raz1.jpg",
         "/projects/raz2.jpg",
@@ -243,7 +243,7 @@ export default function PortfolioPage() {
       role: "Web Developer · Client Project",
       description:
         "A client based pet supplies website designed to showcase pet food, toys, and accessories. Customers can browse and search the product catalog, manage a shopping cart, create accounts, review order history, and choose store pickup or home delivery, with payment options including PayPal and cash on delivery.",
-      technologies: ["E-commerce", "Product Catalog", "Online Ordering", "PayPal", "Cash on Delivery"],
+      technologies: ["HTML", "CSS", "JavaScript", "PHP"],
       images: [
         "/projects/pet1.jpg",
         "/projects/pet2.jpg",
@@ -752,7 +752,7 @@ export default function PortfolioPage() {
 
               <h2
                 id="portfolio-heading"
-                className={`text-3xl sm:text-4xl lg:text-3xl sm:text-4xl lg:text-[46px] font-semibold leading-tight sm:leading-[1.05] break-words tracking-tight mt-2 max-w-[800px] break-words ${t.title}`}
+                className={`text-3xl sm:text-4xl lg:text-[46px] font-semibold leading-[1.25] sm:leading-[1.25] lg:leading-[1.25] break-words tracking-tight mt-2 max-w-[800px] ${t.title}`}
               >
                 Projects shaped by practical problems
               </h2>
